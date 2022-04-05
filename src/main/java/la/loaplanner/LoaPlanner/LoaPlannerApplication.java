@@ -11,19 +11,18 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class LoaPlannerApplication {
 	private static JDA jda = null;
-	private static final String BOT_TOKEN = "OTM1ODk3ODk1Mjc2Nzk3OTYz.YfFU1g.6-sguhcqbswh92awNkxzNqtRHQw";
+	private static final String BOT_TOKEN = "OTM1ODk3ODk1Mjc2Nzk3OTYz.YfFU1g.5-yLbY6pTaXe2buJd3D4EVmSInc";
 
 	public static void main(String[] args) {
 
 		try {
 			jda = JDABuilder.createDefault(BOT_TOKEN)
-					.addEventListeners(new TodoliBotEventListner())
-					.build();
+				.addEventListeners(new TodoliBotEventListner())
+				.build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		SpringApplication.run(LoaPlannerApplication.class, args);
 	}
-
 }
