@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import la.loaplanner.LoaPlanner.controller.dto.UserRequestDto;
-import la.loaplanner.LoaPlanner.model.user.User;
 import la.loaplanner.LoaPlanner.service.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -19,5 +18,4 @@ public class UserController {
 	public UserDetails login(@RequestBody UserRequestDto requestDto) {
 		return userService.loadUserByUsername(requestDto.getUsername());
 	}
-
 }
