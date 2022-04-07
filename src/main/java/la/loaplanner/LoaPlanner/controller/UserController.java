@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import la.loaplanner.LoaPlanner.controller.dto.UserRequestDto;
 import la.loaplanner.LoaPlanner.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,16 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 	private final UserService userService;
 
-	@PostMapping("/login")
-	public UserDetails login(@RequestBody UserRequestDto requestDto) {
-		System.out.println("login!!!!");
-		return userService.loadUserByUsername(requestDto.getUsername());
-	}
-
 	@PostMapping("/user")
-	public String signup(@RequestBody UserRequestDto userRequestDto) { // 회원 추가
+	public RedirectView signup(UserRequestDto userRequestDto) { // 회원 추가
 		userService.save(userRequestDto);
-		return "redirect:/login";
+		return new RedirectView("/login.html");
 	}
 
 	@GetMapping(value = "/logout")
