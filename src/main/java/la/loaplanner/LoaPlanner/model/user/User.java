@@ -1,18 +1,12 @@
 package la.loaplanner.LoaPlanner.model.user;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
+import lombok.AccessLevel;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Builder;
@@ -21,14 +15,18 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(unique = true)
 	private String username;
+
 	private String password;
+
+	private String auth;
 
 	@OneToMany(mappedBy="user")
 	private List<Character> characters = new ArrayList<>();
@@ -37,34 +35,59 @@ public class User implements UserDetails {
 	private Group group;
 
 	@Builder
-	public User(Long id, String username, String password) {
-		this.id = id;
+	public User(String username, String password, String auth) {
 		this.username = username;
 		this.password = password;
+		this.auth = auth;
 	}
 
+	// 사용자의 권한을 콜렉션 형태로 반환
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		Set<GrantedAuthority> roles = new HashSet<>();
+		for (String role : auth.split(",")) {
+			roles.add(new SimpleGrantedAuthority(role));
+		}
+		return roles;
 	}
 
+	// 사용자의 id를 반환
+	@Override
+	public String getUsername() {
+		return username;
+	}
+
+	// 사용자의 password를 반환
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	// 계정 만료 여부 반환
 	@Override
 	public boolean isAccountNonExpired() {
-		return true;
+		// 만료되었는지 확인하는 로직
+		return true; // true -> 만료되지 않았음
 	}
 
+	// 계정 잠금 여부 반환
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		// 계정 잠금되었는지 확인하는 로직
+		return true; // true -> 잠금되지 않았음
 	}
 
+	// 패스워드의 만료 여부 반환
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return true;
+		// 패스워드가 만료되었는지 확인하는 로직
+		return true; // true -> 만료되지 않았음
 	}
 
+	// 계정 사용 가능 여부 반환
 	@Override
 	public boolean isEnabled() {
-		return true;
+		// 계정이 사용 가능한지 확인하는 로직
+		return true; // true -> 사용 가능
 	}
 }

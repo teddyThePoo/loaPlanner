@@ -4,13 +4,13 @@ import lombok.Data;
 
 @Data
 public class UserRequestDto {
-	private Long id;
 	private String username;
 	private String password;
+	private String auth;
 
-	public UserRequestDto(Long id, String username, String password) {
-		this.id = id;
+	public UserRequestDto(String username, String password, String auth) {
 		this.username = username;
 		this.password = password;
+		this.auth = auth;
 	}
 }
